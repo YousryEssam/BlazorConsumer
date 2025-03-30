@@ -1,0 +1,26 @@
+﻿@page "/Category/Detalis/{id:int}"
+<h1> Category Detalis </h1>
+@if(category!= null)
+{
+    <h2>
+        <span class="text-danger"> Id :  @category.Id </span>  , 
+        <span class="text-primary">Name :  @category.Name  </span>  ,
+        <span class="text-secondary">  Description : @category.Description </span>.
+    </h2>
+}
+
+@code {
+    [Parameter]
+    public int id { set; get; }
+    Category category { set; get; }
+
+    [Inject]
+    public IGenServices<Category> categoryService { set; get; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        category = await categoryService.Get(id);
+        base.OnInitializedAsync();
+    }
+
+}

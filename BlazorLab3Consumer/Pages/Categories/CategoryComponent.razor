@@ -1,0 +1,49 @@
+﻿@page "/Category"
+<h1> Categories All</h1>
+
+@if(Categories != null)
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th> Show Detalis </th>
+            <th> Edite </th>
+            <th> Delete </th>
+        </tr>
+        @foreach (var item in Categories)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td><a href="/Category/Detalis/@item.Id">Show Detalis</a></td>
+                <td><a href="/Category/Edit/@item.Id">Edite</a></td>
+                <td><a href="/Category" class="text-danger" @onclick="() => DeleteCategory(item.Id)">Delete</a></td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    public int deleteId { set; get; }
+    [Inject]
+    public IGenServices<Category> categoryService { set; get; }
+    [Inject]
+    public NavigationManager navigationManager { set; get; }
+
+    public List<Category> Categories { set; get; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await categoryService.GetAll();
+        base.OnInitializedAsync();
+    }
+    void DeleteCategory(int id)
+    {
+        Console.WriteLine("Test");
+        categoryService.Delete(id);
+        navigationManager.NavigateTo("/Category");
+    }
+}
